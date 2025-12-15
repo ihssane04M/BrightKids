@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors - Pastel Palette -->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_600">#FF5E35B1</color>
+    <color name="purple_700">#FF3700B3</color>
+
+    <!-- Secondary Colors - Updated to Pastel -->
+    <color name="teal_200">#FF8BD2E3</color>
+    <color name="teal_500">#FF4DB6D4</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="teal_600">#FF4DB6D4</color>
+    
+    <!-- New Pastel Colors from Illustration -->
+    <color name="sky_blue_pastel">#FFB0E0E6</color>
+    <color name="mint_green_pastel">#FFD8F5E6</color>
+    <color name="pink_pastel">#FFF4A9BC</color>
+    <color name="yellow_pastel">#FFF9E076</color>
+    <color name="light_blue_pastel">#FF8BD2E3</color>
+    <color name="teal_pastel">#FF4DB6D4</color>
+    <color name="peach_skin">#FFF5D6C7</color>
+    <color name="rosy_pink">#FFF7C7BD</color>
+    <color name="dark_brown">#FF6A3B2D</color>
+    <color name="text_charcoal">#FF4A4A4A</color>
+
+    <!-- UI Colors -->
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+    <color name="text_dark">#FF4A4A4A</color>
+
+    <!-- Custom Colors for Kids - Pastel Palette -->
+    <color name="pink_400">#FFF4A9BC</color>
+    <color name="pink_500">#FFF4A9BC</color>
+    <color name="blue_400">#FF8BD2E3</color>
+    <color name="blue_500">#FF4DB6D4</color>
+    <color name="blue_600">#FF4DB6D4</color>
+    <color name="green_400">#FFD8F5E6</color>
+    <color name="green_500">#FFC8E6C9</color>
+    <color name="orange_400">#FFFFA726</color>
+    <color name="orange_500">#FFFF9800</color>
+    <color name="yellow_300">#FFF9E076</color>
+    <color name="yellow_400">#FFF9E076</color>
+    <color name="red_500">#FFF44336</color>
+    <color name="red_400">#FFEF5350</color>
+    <color name="indigo_400">#FF5C6BC0</color>
+    
+    <!-- Letter Colors (lighter shades for backgrounds) -->
+    <color name="letter_red">#FFE57373</color>
+    <color name="letter_blue">#FF81D4FA</color>
+    <color name="letter_green">#FFA5D6A7</color>
+    <color name="letter_yellow">#FFFFF59D</color>
+    <color name="letter_purple">#FFCE93D8</color>
+    
+    <!-- Letter Text Colors (darker shades) -->
+    <color name="letter_text_red">#FFC62828</color>
+    <color name="letter_text_blue">#FF0277BD</color>
+    <color name="letter_text_green">#FF2E7D32</color>
+    <color name="letter_text_orange">#FFE65100</color>
+    <color name="letter_text_purple">#FF7B1FA2</color>
+    
+    <!-- Background Colors - Pastel -->
+    <color name="teal_light">#FFB0E0E6</color>
+    <color name="teal_light_darker">#FF8BD2E3</color>
+    <color name="sky_blue_background">#FFB0E0E6</color>
+    <color name="mint_green_background">#FFD8F5E6</color>
+
+    <!-- Grayscale -->
+    <color name="gray_100">#FFF5F5F5</color>
+    <color name="gray_200">#FFEEEEEE</color>
+    <color name="gray_300">#FFE0E0E0</color>
+    <color name="gray_400">#FFBDBDBD</color>
+    <color name="gray_700">#FF616161</color>
+    <color name="gray_800">#FF424242</color>
+    
+    <!-- Onboarding Colors - Pastel -->
+    <color name="onboarding_bg">#FFB0E0E6</color>
+    <color name="onboarding_text_primary">#FF4A4A4A</color>
+    <color name="onboarding_text_secondary">#FF86868B</color>
+    <color name="onboarding_step_number">#FFD1D1D6</color>
+    <color name="onboarding_card_bg">#FFFFFFFF</color>
+    <color name="blue_gradient_start">#FF8BD2E3</color>
+    <color name="blue_gradient_end">#FF4DB6D4</color>
+    <color name="green_gradient_start">#FFD8F5E6</color>
+    <color name="green_gradient_end">#FFC8E6C9</color>
+</resources>

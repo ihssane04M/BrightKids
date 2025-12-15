@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BrightKids</string>
+    <string name="alphabet_arabic">Alphabet Arabe</string>
+    <string name="alphabet_french">Alphabet Français</string>
+    <string name="learn_fun">Apprends en t\'amusant!</string>
+    <string name="draw_letter">Trace la lettre avec ton doigt!</string>
+    <string name="play_sound">Écouter le son</string>
+    <string name="clear">Effacer</string>
+    <string name="restart">Recommencer</string>
+    <string name="back">Retour</string>
+    <string name="welcome">Bienvenue !</string>
+    <string name="create_profile">Crée ton profil pour commencer</string>
+    <string name="choose_avatar">CHOISIS TON AVATAR</string>
+    <string name="your_name">TON PRÉNOM</string>
+    <string name="name_placeholder">Ex: Léo</string>
+    <string name="lets_go">C\'EST PARTI</string>
+    <string name="enter_name_error">Veuillez entrer votre prénom</string>
+</resources>

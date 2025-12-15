@@ -1,0 +1,59 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.BrightKids"
+        tools:targetApi="31">
+
+        <!-- Splash Activity (launcher) -->
+        <activity
+            android:name="com.example.brightkids.SplashActivity"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BrightKids">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Intro Activity -->
+        <activity
+            android:name="com.example.brightkids.IntroActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BrightKids"/>
+
+        <!-- Onboarding Activity -->
+        <activity
+            android:name="com.example.brightkids.OnboardingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.BrightKids"/>
+
+        <!-- Main Activity -->
+        <activity
+            android:name="com.example.brightkids.MainActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <!-- Letter List Activity -->
+        <activity
+            android:name="com.example.brightkids.LetterListActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+        <!-- Drawing Activity -->
+        <activity
+            android:name="com.example.brightkids.DrawingActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"/>
+
+    </application>
+
+</manifest>
