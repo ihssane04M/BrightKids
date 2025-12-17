@@ -176,3 +176,6 @@ tts.setPitch(1.2f)  // 0.5 = grave, 1.0 = normal, 2.0 = aigu
 ---
 
 *Document créé pour localiser toutes les options de son dans le projet*
+
+
+

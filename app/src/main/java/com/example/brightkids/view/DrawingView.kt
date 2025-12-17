@@ -5,6 +5,7 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import kotlin.math.min
 
 class DrawingView @JvmOverloads constructor(
     context: Context,
@@ -31,11 +32,11 @@ class DrawingView @JvmOverloads constructor(
 
     private val textPaint = Paint().apply {
         color = Color.parseColor("#BBBBBB") // Light gray
-        textSize = 220f // Large size for better visibility
+        textSize = 220f // Initial size, will be scaled dynamically
         textAlign = Paint.Align.CENTER
         isAntiAlias = true
         typeface = Typeface.create(Typeface.DEFAULT_BOLD, Typeface.BOLD)
-        strokeWidth = 12f // Thick stroke width for bold effect
+        strokeWidth = 12f // Will also be scaled with view size
         alpha = 150 // More visible for better tracing
     }
 
@@ -151,6 +152,12 @@ class DrawingView @JvmOverloads constructor(
         // Clear the bitmap first
         bitmap.eraseColor(Color.TRANSPARENT)
         drawCanvas = Canvas(bitmap)
+
+        // Dynamically scale letter size based on view dimensions
+        val minDim = min(viewWidth, viewHeight).toFloat()
+        // Letter will take about 65% of the smallest dimension
+        textPaint.textSize = minDim * 0.65f
+        textPaint.strokeWidth = minDim * 0.03f
         
         // Calculate position to center the letter
         val textBounds = Rect()

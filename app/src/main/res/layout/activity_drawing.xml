@@ -2,177 +2,100 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/onboarding_bg">
 
-    <!-- Header with back button -->
-    <LinearLayout
-        android:id="@+id/header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical"
-        android:backgroundTint="@color/teal_600"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/btnBack"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:src="@drawable/ic_back_arrow"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/back"
-            android:padding="12dp"
-            android:tint="@color/white"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/draw_letter"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:textColor="@color/blue_600"
-            android:gravity="center"
-            android:layout_marginStart="8dp"/>
-    </LinearLayout>
-
-    <!-- Card showing the letter -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/cardLetter"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
-        app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/header"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tvLetter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textSize="96sp"
-                android:textStyle="bold"
-                android:textColor="@color/teal_600"
-                android:fontFamily="sans-serif-black"/>
-
-            <TextView
-                android:id="@+id/tvLetterName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="A"
-                android:textSize="24sp"
-                android:textStyle="bold"
-                android:textColor="@color/gray_700"
-                android:layout_marginTop="8dp"/>
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <!-- Card for drawing -->
+    <!-- Full-screen drawing surface -->
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardDrawing"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:cardCornerRadius="24dp"
-        app:cardElevation="8dp"
+        android:layout_margin="0dp"
+        app:cardCornerRadius="0dp"
+        app:cardElevation="0dp"
         app:cardBackgroundColor="@color/white"
-        app:layout_constraintTop_toBottomOf="@id/cardLetter"
-        app:layout_constraintBottom_toTopOf="@id/actionButtons"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.50">
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <LinearLayout
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginBottom="12dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="✏️ Trace la lettre avec ton doigt!"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/gray_800"
-                    android:layout_gravity="center_vertical"/>
-
-            </LinearLayout>
+            android:padding="0dp">
 
             <com.example.brightkids.view.DrawingView
                 android:id="@+id/drawingView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"/>
-        </LinearLayout>
+
+            <!-- Eraser button at the top-right of drawing area -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/btnClear"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_eraser"
+                app:fabCustomSize="64dp"
+                app:maxImageSize="32dp"
+                app:tint="@color/white"
+                app:backgroundTint="@color/red_500"
+                android:contentDescription="@string/clear"
+                android:layout_gravity="top|end" />
+
+        </FrameLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <!-- Action buttons row - Organized icons -->
+    <!-- Action buttons row -->
     <LinearLayout
         android:id="@+id/actionButtons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:padding="20dp"
+        android:layout_width="402dp"
+        android:layout_height="141dp"
+        android:layout_marginBottom="24dp"
+        android:elevation="12dp"
         android:gravity="center"
+        android:orientation="horizontal"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-        <!-- Play sound button -->
+        <!-- Previous letter button -->
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btnBackLetter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/back"
+            android:src="@drawable/ic_back_arrow"
+            app:backgroundTint="@color/blue_500"
+            app:fabSize="normal"
+            app:tint="@color/white" />
+
+        <!-- Play sound button (center) -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/btnPlaySound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="32dp"
+            android:layout_marginEnd="32dp"
+            android:contentDescription="@string/play_sound"
             android:src="@drawable/ic_play_sound"
-            app:fabSize="normal"
-            app:tint="@color/white"
             app:backgroundTint="@color/green_500"
-            android:layout_marginEnd="32dp"
-            android:contentDescription="@string/play_sound"/>
+            app:fabSize="normal"
+            app:tint="@color/white" />
 
-        <!-- Clear button -->
+        <!-- Next letter button -->
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnClear"
+            android:id="@+id/btnNextLetter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_clear"
-            app:fabSize="normal"
-            app:tint="@color/white"
-            app:backgroundTint="@color/red_500"
-            android:layout_marginEnd="32dp"
-            android:contentDescription="@string/clear"/>
-
-        <!-- Restart button -->
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/btnRestart"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_restart"
-            app:fabSize="normal"
-            app:tint="@color/white"
+            android:contentDescription="@string/next"
+            android:src="@drawable/ic_next_arrow"
             app:backgroundTint="@color/blue_500"
-            android:contentDescription="@string/restart"/>
+            app:fabSize="normal"
+            app:tint="@color/white" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

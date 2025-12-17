@@ -2,13 +2,10 @@ package com.example.brightkids
 
 import android.content.Intent
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -28,7 +25,6 @@ class OnboardingActivity : AppCompatActivity() {
         "🦊", "🐼", "🐨", "🐸",
         "🦄", "🐝", "🦕", "🐙"
     )
-    private var userName: String = ""
     private var currentPage = 0
     private val totalPages = 1
 
@@ -106,25 +102,13 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun canProceed(): Boolean {
-        // For now, just check if name is entered
-        val view = binding.viewPager.getChildAt(0) as? ViewGroup
-        val pageView = view?.getChildAt(0)
-        val nameInput = pageView?.findViewById<com.google.android.material.textfield.TextInputEditText>(
-            com.brightkids.learning.R.id.etName
-        )
-        
-        userName = nameInput?.text?.toString()?.trim() ?: ""
-        return userName.isNotEmpty()
+        // Name input removed: allow proceeding (avatar is always selectable; default is 0).
+        return true
     }
 
     private fun completeOnboarding() {
-        if (userName.isEmpty()) {
-            Toast.makeText(this, "Veuillez entrer votre prénom", Toast.LENGTH_SHORT).show()
-            return
-        }
-
         // Save user profile
-        prefsManager.setUserName(userName)
+        prefsManager.setUserName("")
         prefsManager.setUserAvatar(selectedAvatarPosition)
         prefsManager.setOnboardingCompleted(true)
 
@@ -175,7 +159,6 @@ class OnboardingActivity : AppCompatActivity() {
 
             fun bind() {
                 setupAvatarGrid()
-                setupNameInput()
             }
 
             private fun setupAvatarGrid() {
@@ -187,16 +170,6 @@ class OnboardingActivity : AppCompatActivity() {
                 binding.recyclerViewAvatars.adapter = avatarAdapter
             }
 
-            private fun setupNameInput() {
-                binding.etName.addTextChangedListener(object : TextWatcher {
-                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-                    override fun afterTextChanged(s: Editable?) {
-                        userName = s?.toString()?.trim() ?: ""
-                        updateNavigationButtons()
-                    }
-                })
-            }
         }
     }
 }

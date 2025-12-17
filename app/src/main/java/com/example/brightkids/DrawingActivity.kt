@@ -1,16 +1,15 @@
 package com.example.brightkids
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.speech.tts.TextToSpeech
-import android.view.LayoutInflater
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.MarginLayoutParamsCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
 import com.brightkids.learning.databinding.ActivityDrawingBinding
-import com.brightkids.learning.databinding.DialogScoreBinding
 import com.example.brightkids.database.AppDatabase
 import com.example.brightkids.model.Letter
 import com.example.brightkids.model.LetterProgress
@@ -33,29 +32,63 @@ class DrawingActivity : AppCompatActivity() {
         binding = ActivityDrawingBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Edge-to-edge: let the drawing surface truly fill the screen, then inset controls as needed.
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
         val letter = intent.getStringExtra("LETTER") ?: "A"
         letterName = intent.getStringExtra("NAME") ?: "A"
         language = intent.getStringExtra("LANGUAGE") ?: "french"
         letterId = intent.getIntExtra("LETTER_ID", 0)
 
+        applySystemBarInsets()
         setupUI(letter)
         initializeTTS()
         setupScoreTracking()
     }
 
+    private fun applySystemBarInsets() {
+        val baseActionBottomMargin =
+            (binding.actionButtons.layoutParams as? ConstraintLayout.LayoutParams)?.bottomMargin ?: 0
+
+        val clearLp = binding.btnClear.layoutParams
+        val baseClearTopMargin = (clearLp as? android.view.ViewGroup.MarginLayoutParams)?.topMargin ?: 0
+        val baseClearEndMargin = (clearLp as? android.view.ViewGroup.MarginLayoutParams)?.let {
+            MarginLayoutParamsCompat.getMarginEnd(it)
+        } ?: 0
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { _, insets ->
+            val sysBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+            // Keep bottom controls above the system navigation bar (and lifted slightly).
+            (binding.actionButtons.layoutParams as? ConstraintLayout.LayoutParams)?.let { lp ->
+                lp.bottomMargin = baseActionBottomMargin + sysBars.bottom
+                binding.actionButtons.layoutParams = lp
+            }
+
+            // Keep the eraser button below the status bar, and away from the right inset.
+            (binding.btnClear.layoutParams as? android.view.ViewGroup.MarginLayoutParams)?.let { lp ->
+                lp.topMargin = baseClearTopMargin + sysBars.top
+                MarginLayoutParamsCompat.setMarginEnd(lp, baseClearEndMargin + sysBars.right)
+                binding.btnClear.layoutParams = lp
+            }
+
+            insets
+        }
+    }
+
     private fun setupUI(letter: String) {
-        binding.tvLetter.text = letter
-        binding.tvLetterName.text = letterName
-        
-        // Set the letter guide in the drawing view
+        // Set the letter guide in the drawing view only
         binding.drawingView.setLetter(letter)
 
-        binding.btnBack.setOnClickListener { finish() }
         binding.btnPlaySound.setOnClickListener { speakLetter() }
         binding.btnClear.setOnClickListener { binding.drawingView.clear() }
-        binding.btnRestart.setOnClickListener {
-            binding.drawingView.clear()
-            speakLetter()
+        binding.btnBackLetter.setOnClickListener {
+            // Revenir à la lettre précédente s'il y en a une
+            navigateToPreviousLetter()
+        }
+        binding.btnNextLetter.setOnClickListener {
+            // Passer à la lettre suivante
+            navigateToNextLetter()
         }
     }
 
@@ -72,55 +105,8 @@ class DrawingActivity : AppCompatActivity() {
     private fun setupScoreTracking() {
         binding.drawingView.onDrawingComplete = { score, duration ->
             val stars = binding.drawingView.getStarsFromScore(score)
-            showScoreDialog(score, stars)
             saveProgress(score, stars)
         }
-    }
-    
-    private fun showScoreDialog(score: Int, stars: Int) {
-        val dialogBinding = DialogScoreBinding.inflate(LayoutInflater.from(this))
-        val dialog = Dialog(this)
-        dialog.setContentView(dialogBinding.root)
-        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
-        dialog.setCancelable(false) // Prevent dismissing by clicking outside
-        
-        // Set score
-        dialogBinding.tvScoreValue.text = "$score%"
-        
-        // Set dynamic title and message based on stars
-        val (title, message) = getScoreMessages(stars, score)
-        dialogBinding.tvScoreTitle.text = title
-        dialogBinding.tvScoreMessage.text = message
-        
-        // Initialize stars with low alpha
-        dialogBinding.star1.alpha = 0.3f
-        dialogBinding.star2.alpha = 0.3f
-        dialogBinding.star3.alpha = 0.3f
-        dialogBinding.star1.scaleX = 0.5f
-        dialogBinding.star1.scaleY = 0.5f
-        dialogBinding.star2.scaleX = 0.5f
-        dialogBinding.star2.scaleY = 0.5f
-        dialogBinding.star3.scaleX = 0.5f
-        dialogBinding.star3.scaleY = 0.5f
-        
-        // Animate stars based on score with delay
-        animateStars(dialogBinding, stars)
-        
-        // Setup button click listeners
-        dialogBinding.btnScoreOk.setOnClickListener {
-            dialog.dismiss()
-            // Always navigate to next letter when clicking continue
-            navigateToNextLetter()
-        }
-        
-        dialogBinding.btnScoreTryAgain.setOnClickListener {
-            dialog.dismiss()
-            // Clear and restart current letter
-            binding.drawingView.clear()
-            speakLetter()
-        }
-        
-        dialog.show()
     }
     
     private fun navigateToNextLetter() {
@@ -140,9 +126,27 @@ class DrawingActivity : AppCompatActivity() {
             finish()
         }
     }
+
+    private fun navigateToPreviousLetter() {
+        val previousLetter = getPreviousLetter()
+        if (previousLetter != null) {
+            val intent = Intent(this, DrawingActivity::class.java)
+            intent.putExtra("LETTER", previousLetter.letter)
+            intent.putExtra("NAME", previousLetter.name)
+            intent.putExtra("LANGUAGE", language)
+            intent.putExtra("LETTER_ID", previousLetter.id)
+            startActivity(intent)
+            finish()
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        } else {
+            // Si pas de lettre précédente, revenir à la liste
+            setResult(RESULT_OK)
+            finish()
+        }
+    }
     
     override fun onBackPressed() {
-        // When going back, set result to update progress in LetterListActivity
+        // Quand on revient en arrière, on met aussi à jour la liste
         setResult(RESULT_OK)
         super.onBackPressed()
     }
@@ -155,6 +159,17 @@ class DrawingActivity : AppCompatActivity() {
             letters[currentIndex + 1]
         } else {
             null // Last letter, no next letter
+        }
+    }
+
+    private fun getPreviousLetter(): Letter? {
+        val letters = if (language == "arabic") getArabicLetters() else getFrenchLetters()
+        val currentIndex = letters.indexOfFirst { it.id == letterId }
+
+        return if (currentIndex > 0) {
+            letters[currentIndex - 1]
+        } else {
+            null // Première lettre, pas de précédente
         }
     }
     
@@ -217,52 +232,6 @@ class DrawingActivity : AppCompatActivity() {
         Letter(25, "Y", "I grec", "french"),
         Letter(26, "Z", "Zède", "french")
     )
-    
-    private fun getScoreMessages(stars: Int, score: Int): Pair<String, String> {
-        return when (stars) {
-            3 -> Pair("Excellent ! ⭐⭐⭐", "Parfait ! Tu es incroyable !")
-            2 -> Pair("Très bien ! ⭐⭐", "Super travail ! Tu progresses bien !")
-            1 -> Pair("Bien joué ! ⭐", "Continue tes efforts, tu y es presque !")
-            else -> Pair("Continue ! 💪", "N'abandonne pas, tu peux y arriver !")
-        }
-    }
-    
-    private fun animateStars(binding: DialogScoreBinding, stars: Int) {
-        // Animate stars one by one with a bounce effect
-        val starsList = listOf(binding.star1, binding.star2, binding.star3)
-        
-        starsList.forEachIndexed { index, starView ->
-            val delay = index * 200L // 200ms delay between each star
-            val hasStar = stars > index
-            
-            starView.postDelayed({
-                if (hasStar) {
-                    // Bounce animation for earned stars
-                    starView.animate()
-                        .alpha(1f)
-                        .scaleX(1.2f)
-                        .scaleY(1.2f)
-                        .setDuration(300)
-                        .withEndAction {
-                            starView.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .setDuration(200)
-                                .start()
-                        }
-                        .start()
-                } else {
-                    // Fade in for non-earned stars
-                    starView.animate()
-                        .alpha(0.3f)
-                        .scaleX(1f)
-                        .scaleY(1f)
-                        .setDuration(300)
-                        .start()
-                }
-            }, delay)
-        }
-    }
     
     private fun saveProgress(score: Int, stars: Int) {
         if (letterId == 0) return
